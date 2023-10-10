@@ -1,0 +1,26 @@
+---
+title: Anonymization
+description:  We will explore the process of anonymization, specifically how Pontus anonymizes data and deidentifies personal information while preserving the power of LLM (Large Language Models). 
+---
+
+
+## What is Anonymization?
+
+Anonymization is the process of rendering information untraceable to an individual. It involves the removal or alteration of data elements that could identify a person, such as names, addresses, phone numbers, and other personal details. Anonymization is crucial for ensuring compliance with GDPR and CPRA regulations, particularly in the context of the "right to be forgotten."
+
+
+<Warning>
+It's important to distinguish between anonymization and pseudonymization. A one-to-one mapping of tokens to individuals is considered pseudonymization, not true anonymization, as defined by GDPR. Pseudonymization can still potentially identify the person associated with a token.
+</Warning>
+
+## How does Pontus Anonymize Data?
+
+Pontus employs a three-step process for anonymizing data:
+
+1. **Identification of PII (Personally Identifiable Information):** Pontus utilizes NLP algorithms to automatically detect PII in the data. Additionally, customers have the flexibility to define their own PII identification methods.
+
+2. **Replacement of PII with Randomized Unique Tokens:** All instances of PII are replaced with randomized, unique tokens generated for each session. For example, `john` might be transformed into `ZG5mamRuZiBqYXNuYWpkIGEzbzNl`.
+
+3. **Creation of Tokens for Personalization:** To maintain the personalization capabilities of LLM, Pontus associates each token with an entity. For instance, `ZG5mamRuZiBqYXNuYWpkIGEzbzNl` could be associated with `person_0.`
+
+By implementing this process, Pontus can personalize data without retaining any actual PII, ensuring compliance with GDPR and CPRA regulations.

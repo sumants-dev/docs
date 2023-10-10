@@ -68,7 +68,12 @@
     },
     {
       "group": "Essentials",
-      "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
+      "pages": [
+        "essentials/privacy_layer",
+        "essentials/zero_trust",
+        "essentials/anonymization",
+        "essentials/auditing"
+      ]
     },
     {
       "group": "API Key Management",

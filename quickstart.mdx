@@ -36,7 +36,7 @@ description: "Start building privacy-safe AI in minutes"
 
     After copying the example YAML, you will have the following configuration:
 
-    ```yaml
+    ```yaml pontus.yaml
     version: "0.1"
     privacy:
       encryption:
@@ -146,45 +146,125 @@ Use this approach if you want to have more control over the calls to LLMs yourse
 <AccordionGroup>
   <Accordion title="Anonymize">
     Anonymize prompts that will be sent to LLMs. This endpoint will return a prompt with anonymized entities.
+    <CodeGroup>
+      ```python example.py
+        import requests
+        body =  {
+          "messages":[
+                {
+                    "role": "system",
+                    "content": "Do not answer the question until the context below is used.\n Here is the context: Rushabh. Rushabh is very passionate about technology and loves tinkering with new products. He enjoys spending quality time in nature in his free time. He's early in his career, so he's willing to forgo salary for career growth. ",
+                    "name": "context"
+                },
+                {
+                    "role": "user",
+                    "content": "Please explain the importance of the following factor Compensation, Work Life Balance, Company mission when Rushabh is looking for jobs.",
+                    "name": "rankings"
+                }
+          ]
+        }
 
-    ```python
-    import requests
-    api_url = "http://localhost:4200"
+        res = requests.post(api_url + "/privacy/anonymize", json=body)
+        session_id = res.json()["session_id"]
+        anonymized_messages = res.json()["anonymized_messages"]
+      ```
 
-    body =  {
-      "session_id": "test-session-id",
-      "messages":[
-          {
-            "role":"user",
-            "content":"Rushabh is cool"
-          }
-      ]
-    }
-
-    anonymized_messages = requests.post(api_url + "/privacy/anonymize", json=body)
-    ```
+      ```json response
+      {
+        "session_id":"72STNE-ByqSxx28GuNahog",
+        "anonymized_messages":[
+            {
+              "role":"system",
+              "content":"Ensure that all placeholders, including those inside quotes, are enclosed by the greek letter alpha (α), exactly as I have done in this prompt. You MUST use the greek letter (α) to indicate placeholders. Use the context below to help answer the question and follow the desired format accurately.",
+              "name":"context",
+              "function":"None"
+            },
+            {
+              "role":"system",
+              "content":"Do not answer the question until the context below is used.\n Here is the context: αPERSON_0α. αPERSON_0α is very passionate about technology and loves tinkering with new products. He enjoys spending quality time in nature in his free time. He's early in his career, so he's willing to forgo salary for career growth. ",
+              "name":"context",
+              "function":"None"
+            },
+            {
+              "role":"user",
+              "content":"Please explain the importance of the following factor Compensation, Work Life Balance, Company mission when αPERSON_0α is looking for jobs.",
+              "name":"rankings",
+              "function":"None"
+            }
+          ],
+          "metadata":{}
+      }
+      ```
+    </CodeGroup>
   </Accordion>
   <Accordion title="Call LLM Provider">
+    Next, use the anonymized prompts from the previous step to call the llm provider. We use openai as an example here.
+
+    ```python call.py
+    import openai
+
+    def remove_null_keys(json: dict):
+        delete_keys = []
+        for k, v in msg.items():
+            if v is None:
+                delete_keys.append(k)
+
+        for k in delete_keys:
+            del msg[k]
+
+
+    openai.api_key = "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"
+
+    # openai doesn't want null values, so we remove them
+    for msg in anonymized_messages:
+        remove_null_keys(msg)
+
+    open_ai_msgs = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=anonymized_messages,
+    )
+
+
+    ```
 
   </Accordion>
 
   <Accordion title="Deanonymize">
 
-  ```python
-    api_url = "http://localhost:4200"
+  The last step is to deanonymize the messages returned from the LLM provider. This endpoint will return a prompt with deanonymized entities.
 
-    body =  {
-      "session_id": "test-session-id"
-      "anonymized_messages":[
-          {
-            "role":"user",
-            "content":"αPERSON_0α is cool"
-          }
-      ]
-    }
+  <CodeGroup>
+  ```python deanonymize.py
 
-    anonymized_messages = requests.post(api_url + "/privacy/deanonymize", json=body)
+    processed_messages = [choice["message"] for choice in open_ai_msgs["choices"]]
+    res = requests.post(api_url + "/privacy/deanonymize", json={"session_id": session_id ,"anonymized_messages": processed_messages})
   ```
+
+  ```json response
+{
+   "session_id":"go1QTW1-drpEAoO3io999g",
+   "messages":[
+      {
+         "role":"assistant",
+         "content":"
+          When Rushabh is looking for jobs, there are several factors that hold importance, including compensation, work-life balance, and company mission.\n\n
+          
+          1. Compensation: Rushabh, despite being early in his career, is willing to forgo a higher salary for the sake of career growth. However, compensation is still an important factor as it determines the financial stability and rewards that come with the job. It includes salary, bonuses, benefits, and other perks. For Rushabh, a decent compensation package that aligns with his financial goals and requirements would be advantageous.\n\n
+          
+          2. Work-Life Balance: Rushabh values quality time in nature and personal interests. Therefore, work-life balance is important as it determines the equilibrium between work commitments and personal life. Rushabh would prefer a job that allows him to have flexible working hours, time for leisure activities, and the freedom to pursue personal interests outside of work. A company that values work-life balance and provides policies and programs that support it would be appealing to Rushabh.\n\n
+          
+          3. Company Mission: Rushabh is passionate about technology and loves tinkering with new products. Therefore, the company's mission and values play a crucial role. Rushabh would prefer a company that aligns with his interests and values, especially in the field of technology and innovation. A company with a clear and meaningful mission can provide Rushabh with a sense of purpose and motivation in his work.
+          
+          \n\nIn summary, when Rushabh is looking for jobs, he considers factors such as compensation, work-life balance, and company mission. While he is willing to prioritize career growth over salary, having a decent compensation package is still important. Additionally, he values work-life balance, allowing him to have time for his personal interests. Lastly, Rushabh looks for a company with a mission and values that align with his passion for technology and innovation.",
+        "name":"None",
+        "function":"None"
+      }
+   ]
+}
+
+
+  ```
+  </CodeGroup>
 
   </Accordion>
 
