@@ -1,86 +1,210 @@
 ---
-title: 'Quickstart'
-description: 'Start building awesome documentation in under 5 minutes'
+title: "Quickstart"
+description: "Start building privacy-safe AI in minutes"
 ---
 
-## Setup your development
+### Create the Privacy Layer Service
 
-Learn how to update your docs locally and and deploy them to the public.
+<Info>
+  **Prerequisite** Docker is required to build and run the service. If you don't have Docker installed, please follow the instructions [here](https://docs.docker.com/get-docker/).
+</Info>
 
-### Edit and preview
+<Tip>
+  Want a hosted version? Please let us know at <a href="mailto:sumant@pontus.so">sumant@pontus.so</a>.
+</Tip>
 
 <AccordionGroup>
-  <Accordion icon="github" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
+  <Accordion icon="github" title="Clone Pontus Locally">
+    Clone the Pontus repository locally using this command: 
+    ```bash
+    git clone https://github.com/PontusAI/Pontus.git
+    ```
   </Accordion>
-  <Accordion icon="rectangle-terminal" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `mint.json` is): ``` mintlify dev ```
+  <Accordion icon="terminal" title="Set Up Configuration File">
+    Create a `.env` file with the following content:
+    ```env
+    postgres_db_conn_str=<put-your-conn-str-here> // The Postgres database needs pgvector
+    anonymizer_key=<put-random-16-character-string>
+    openai_api_key=<put-your-openai-api-key-here>
+    ```
+
+    Create a `pontus.yaml` file in the root directory of the repository. The file will read environment variables from your local environment or the `.env` file. For the quick start, we recommend copying the example file with the following command:
+
+    ```bash
+    cp pontus.example.yaml pontus.yaml
+    ```
+
+    After copying the example YAML, you will have the following configuration:
+
+    ```yaml
+    version: "0.1"
+    privacy:
+      encryption:
+        encryption_method: AES
+        key: env:anonymizer_key
+      entity_resolution: containment
+      sensitive_data:
+        sensitive_data_method: presidio
+        threshold: .5
+        sensitive_data_types:
+          - person
+          - email_address
+    application:
+      database:
+        type: postgres
+        conn_str: env:postgres_db_conn_str
+      authentication:
+        type: no_auth
+    llm:
+      provider:
+        type: openai
+        default_model: gpt-3.5-turbo
+        api_key: env:openai_api_key
+      cache:
+        type: small_cache
+        vector_collection:
+          type: pgvector
+          conn_str: env:postgres_db_conn_str
+          collection_name: prompt_cache
+        embedder:
+          type: sentence_transformer
+          model: all-MiniLM-L6-v2
+    document_store:
+      vector_collection:
+        type: pgvector
+        conn_str: env:postgres_db_conn_str
+        collection_name: node
+      chunker:
+        type: simple
+        chunk_overlap: 10
+      embedder:
+        type: sentence_transformer
+        model: all-MiniLM-L6-v2
+    ```
+
+  </Accordion>
+  <Accordion title="Build Service" icon="docker">
+    We use Docker to build and run the service, so it is required to have Docker installed on your machine.
+    Build the service with the following command:
+    ```bash
+    docker compose up --build
+    ```
+    If everything is set up correctly, you should be able to access the documentation for the running service at `https://localhost:4200`. 
   </Accordion>
 </AccordionGroup>
 
-### Deploy your changes
+
+### Using the Privacy Layer
+
+Choose either the standard or advanced method to use the privacy layer service. The standard method is recommended for most users.
+
+**Standard**
+
+This is a drop-in replacement for your existing AI service.
 
 <AccordionGroup>
+  <Accordion title="Start a Chat Completion Session" icon="message">
+    Our chat completion endpoint interacts with an LLM provider specified in the configuration file. The endpoint will return a completion for the given prompt.
 
-<Accordion icon="message-bot" title="Install our Github app">
-  Our Github app automatically deploys your changes to your docs site, so you
-  don't need to manage deployments yourself. You can find the link to install on
-  your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-  successfully installed, there should be a check mark next to the commit hash
-  of the repo.
-</Accordion>
-<Accordion icon="rocket" title="Push your changes">
-  [Commit and push your changes to
-  Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-  for your changes to update in your docs site. If you push and don't see that
-  the Github app successfully deployed your changes, you can also manually
-  update your docs through our [dashboard](https://dashboard.mintlify.com).
-</Accordion>
+    Here is an example of a request to the chat completion endpoint in Python:
+
+    ```python
+    import requests
+    base_url = "http://localhost:4200"
+
+    request = {
+      "provider": "openai",
+      "model": "gpt-3.5-turbo",
+      "messages": [
+          {
+              "role": "system",
+              "content": """Do not answer the question until the context below is used.\n 
+              Here is the context: Rushabh. Rushabh is very passionate about technology and loves tinkering with new products. 
+              He enjoys spending quality time in nature in his free time. 
+              He's early in his career, so he's willing to forgo salary for career growth.""",
+              "name": "context"
+          },
+          {
+              "role": "user",
+              "content": """Please explain the importance of the following factors: 
+              Compensation, Work Life Balance, Company mission when Rushabh is looking for jobs.""",
+              "name": "rankings"
+          }
+      ]
+    }
+
+    res = requests.post(f"{api_url}/llm/chat/completions?debug=true", json=request)
+    response = res.json()
+    ```
+  </Accordion>
+</AccordionGroup>
+
+**Advanced**
+
+Use this approach if you want to have more control over the calls to LLMs yourself.
+
+<AccordionGroup>
+  <Accordion title="Anonymize">
+    Anonymize prompts that will be sent to LLMs. This endpoint will return a prompt with anonymized entities.
+
+    ```python
+    import requests
+    api_url = "http://localhost:4200"
+
+    body =  {
+      "session_id": "test-session-id",
+      "messages":[
+          {
+            "role":"user",
+            "content":"Rushabh is cool"
+          }
+      ]
+    }
+
+    anonymized_messages = requests.post(api_url + "/privacy/anonymize", json=body)
+    ```
+  </Accordion>
+  <Accordion title="Call LLM Provider">
+
+  </Accordion>
+
+  <Accordion title="Deanonymize">
+
+  ```python
+    api_url = "http://localhost:4200"
+
+    body =  {
+      "session_id": "test-session-id"
+      "anonymized_messages":[
+          {
+            "role":"user",
+            "content":"αPERSON_0α is cool"
+          }
+      ]
+    }
+
+    anonymized_messages = requests.post(api_url + "/privacy/deanonymize", json=body)
+  ```
+
+  </Accordion>
 
 </AccordionGroup>
 
-## Update your docs
+## Continue with a Tutorial
 
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
-
-<CardGroup>
-
-<Card title="Style Your Docs" icon="paintbrush" href="/settings/global">
-  Add flair to your docs with personalized branding.
-</Card>
-
-<Card
-  title="Add API Endpoints"
-  icon="square-code"
-  href="/api-playground/configuration"
->
-  Implement your OpenAPI spec and enable API user interaction.
-</Card>
-
-<Card
-  title="Integrate Analytics"
-  icon="chart-mixed"
-  href="/analytics/supported-integrations"
->
-  Draw insights from user interactions with your documentation.
-</Card>
-
-<Card
-  title="Host on a Custom Domain"
-  icon="browser"
-  href="/settings/custom-domain/subdomain"
->
-  Keep your docs on your own website's subdomain.
-</Card>
-
+<CardGroup cols={2}>
+  <Card
+    title="Marketing Emails"
+    icon="envelope"
+    href="https://mintlify.com/docs/settings/global"
+  >
+    Send personalized emails to customers without exposing personally identifiable information (PII).
+  </Card>
+  <Card
+    title="Summarizing Healthcare Data"
+    icon="heart"
+    href="https://mintlify.com/docs/api-playground/openapi"
+  >
+    Summarize healthcare data while adhering to HIPAA compliance standards.
+  </Card>
 </CardGroup>

@@ -1,9 +1,9 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Pontus",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "light": "/logo/logo.jpg",
+    "dark": "/logo/logo.jpg"
   },
   "favicon": "/favicon.png",
   "colors": {
@@ -21,7 +21,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:sumant@pontus.so"
     }
   ],
   "topbarCtaButton": {
@@ -34,49 +34,71 @@
       "url": "api-reference"
     }
   ],
+  "api": {
+    "baseUrl": "https://api.pontus.so"
+  },
   "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://pontus.so/blog"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": ["introduction", "quickstart", "why"]
+    },
+    {
+      "group": "Configuration",
+      "pages": [
+        "configuration/introduction",
+        {
+          "group": "Specifications",
+          "pages": [
+            "configuration/version", 
+            "configuration/application", 
+            "configuration/privacy", 
+            "configuration/llm", 
+            "configuration/document_store"
+          ]
+        },
+        "configuration/example_config"
+      ]
     },
     {
       "group": "Essentials",
       "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
     },
     {
-      "group": "API Documentation",
-      "pages": ["api-reference/authentication"]
+      "group": "API Key Management",
+      "pages": [
+        "api-reference/authentication/create-api-key",
+        "api-reference/authentication/delete-api-key"
+      ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Secure LLM",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/update",
-        "api-reference/endpoint/delete"
+        "api-reference/llm/create-chat-completion"
+      ]
+    },
+    {
+      "group": "Privacy",
+      "pages": [
+        "api-reference/privacy/anonymize",
+        "api-reference/privacy/deanonymize"
+      ]
+    },
+    {
+      "group": "Document Store",
+      "pages": [
+        "api-reference/document-store/load",
+        "api-reference/document-store/bulk-load"
       ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "linkedin": "https://www.linkedin.com/company/pontus"
   }
 }
