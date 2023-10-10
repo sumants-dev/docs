@@ -1,0 +1,176 @@
+---
+title: Medical Record Summarization
+description: We summarize medical records with PHI information removed
+---
+
+# Summarizing Medical Records with PHI
+
+## Scenario
+This project aims to summarize medical records while removing protected health information (PHI) from the content. Imagine you are a medical professional tasked with summarizing a medical record. Your goal is to create a concise summary that removes any PHI and makes the medical information easy to understand.
+
+Here's an example of how this process could be implemented in a Python script using an AI model:
+
+## Request to the Privacy Layer
+<CodeGroup>
+```json health_record.py
+import requests
+
+api_url = "http://localhost:8000"
+
+medical_record = """
+import requests
+
+# Define the API URL for your chosen model
+api_url = "http://localhost:8000"
+
+# Medical record with PHI information
+medical_record = """
+   Patient Name: Rogers, Pamela
+   Date: 6/2/04
+   Referral Source: Emergency Department
+   Data Source: Patient
+   Chief Complaint & ID: Ms. Rogers is a 56 y/o WF Define the reason for the patient’s visit as who has been
+   having chest pains for the last week. specifically as possible.
+   ...
+
+   [The full medical record content is provided here]
+"""
+
+# Prepare a request to the AI model for summarization
+request = {
+    "provider": "openai",
+    "model": "gpt-3.5-turbo",
+    "messages": [
+        {
+            "role": "user",
+            "content": f"Please summarize the following medical record: {medical_record}",
+            "name": "context"
+        }
+    ]
+}
+
+# Send the request to the AI model
+response = requests.post(api_url + "/llm/chat/completions?debug=true", json=request)
+
+```
+
+```json request
+{
+   "provider":"openai",
+   "model":"gpt-3.5-turbo",
+   "messages":[
+      {
+         "role":"user",
+         "content":"Please summarize the following medical record: \nPatient Name: Rogers, Pamela\nDate: 6/2/04\nReferral Source: Emergency Department\nData Source: Patient\nChief Complaint & ID: Ms. Rogers is a 56 y/o WF Define the reason for the patient’s visit as who has been\nhaving chest pains for the last week. specifically as possible.\n\nHistory of Present Illness\nThis is the first admission for this 56 year old woman, Convey the acute or chronic nature of the problem and\nwho states she was in her usual state of good health until establish a chronology.\none week prior to admission. At that time she noticed the\nabrupt onset (over a few seconds to a minute) of chest pain onset\nwhich she describes as dull and aching in character. The character\npain began in the left para-sternal area and radiated up to location\nher neck. The first episode of pain one week ago occurred radiation\nwhen she was working in her garden in the middle of the circumstances; exacerbating factors\nday. She states she had been working for approximately 45\nminutes and began to feel tired before the onset of the pain.\nHer discomfort was accompanied by shortness of breath, but associated symptoms\nno sweating, nausea, or vomiting. The pain lasted\napproximately 5 to 10 minutes and resolved when she went duration\ninside and rested in a cool area. resolution; alleviating factors\nSince that initial pain one week ago she has had 2 additional Describe the natural history of her problem since its\nepisodes of pain, similar in quality and location to the first onset\nepisode. Three days ago she had a 15 minute episode of\npain while walking her dog, which resolved with rest. This Change or new circumstances to the problem\nevening she had an episode of pain awaken her from sleep, New duration\nlasting 30 minutes, which prompted her visit to the Reason she come in for visit\nEmergency Department. At no time has she attempted any What has patient tried for relief\nspecific measures to relieve her pain, other than rest. She\ndescribes no other associated symptoms during these\nepisodes of pain, including dizziness, or palpitations. She\nbecomes short of breath during these Relevant positive and negative ROS for this complaint\nepisodes but describes no other exertional dyspnea,\northopnea, or paroxysmal nocturnal dyspnea. No change in the pain\nwith movement, no association with food, no GERD sx, no palpable pain.\nShe has never been told she has heart problems, never had any Review of systems for the relevant organ system\nchest pains before, does not have claudication. She was diagnosed with\nHTN 3 years ago,\nShe does not smoke nor does she have diabetes. Relevant risk factor/environmental conditions\nShe was diagnosed with hypertension 3 years ago and had a\nTAH with BSO 6 years ago. She is not on hormone replacement\ntherapy. There is a family history of premature CAD.\nShe does not know her cholesterol level. \n",
+         "name":"context"
+      }
+   ]
+}
+
+```
+
+```json response
+{
+   "messages":[
+      {
+         "role":"assistant",
+         "content":"Summary:\nThis medical record summarizes the case of Ms. Rogers, a 56-year-old woman who presented to the Emergency Department with a chief complaint of chest pain that had been occurring for the past week. The patient experienced an abrupt onset of dull and aching chest pain in the left para-sternal area, which radiated up to her neck while working in her garden. The pain was accompanied by shortness of breath but no sweating, nausea, or vomiting. The episodes lasted for approximately 5 to 10 minutes and resolved when the patient rested in a cool area. She had two additional episodes of pain, similar in quality and location, one while walking her dog and the other that woke her up from sleep, lasting 15 and 30 minutes, respectively. The patient did not attempt any specific measures to relieve her pain. She did not report any associated symptoms such as dizziness or palpitations but did experience shortness of breath during the episodes. She denied any history of chest pains, heart problems, claudication, smoking, or diabetes. She was diagnosed with hypertension three years ago and had a total abdominal hysterectomy with bilateral salpingo-oophorectomy six years ago. Her family history is significant for premature coronary artery disease. The patient does not know her cholesterol level."
+      }
+   ],
+   "provider_response":{
+      "id":"chatcmpl-88FhQsnAumoNADk94R0t4aTwrPdeG",
+      "object":"chat.completion",
+      "created":1696977664,
+      "model":"gpt-3.5-turbo-0613",
+      "choices":[
+         {
+            "index":0,
+            "message":{
+               "role":"assistant",
+               "content":"Summary:\nThis medical record summarizes the case of Ms. αPERSON_1α, a 56-year-old woman who presented to the Emergency Department with a chief complaint of chest pain that had been occurring for the past week. The patient experienced an abrupt onset of dull and aching chest pain in the left para-sternal area, which radiated up to her neck while working in her garden. The pain was accompanied by shortness of breath but no sweating, nausea, or vomiting. The episodes lasted for approximately 5 to 10 minutes and resolved when the patient rested in a cool area. She had two additional episodes of pain, similar in quality and location, one while walking her dog and the other that woke her up from sleep, lasting 15 and 30 minutes, respectively. The patient did not attempt any specific measures to relieve her pain. She did not report any associated symptoms such as dizziness or palpitations but did experience shortness of breath during the episodes. She denied any history of chest pains, heart problems, claudication, smoking, or diabetes. She was diagnosed with hypertension three years ago and had a total abdominal hysterectomy with bilateral salpingo-oophorectomy six years ago. Her family history is significant for premature coronary artery disease. The patient does not know her cholesterol level."
+            },
+            "finish_reason":"stop"
+         }
+      ],
+      "usage":{
+         "prompt_tokens":718,
+         "completion_tokens":265,
+         "total_tokens":983
+      }
+   },
+   "raw_provider_response":{
+      "id":"chatcmpl-88FhQsnAumoNADk94R0t4aTwrPdeG",
+      "object":"chat.completion",
+      "created":1696977664,
+      "model":"gpt-3.5-turbo-0613",
+      "choices":[
+         {
+            "index":0,
+            "message":{
+               "role":"assistant",
+               "content":"Summary:\nThis medical record summarizes the case of Ms. αPERSON_1α, a 56-year-old woman who presented to the Emergency Department with a chief complaint of chest pain that had been occurring for the past week. The patient experienced an abrupt onset of dull and aching chest pain in the left para-sternal area, which radiated up to her neck while working in her garden. The pain was accompanied by shortness of breath but no sweating, nausea, or vomiting. The episodes lasted for approximately 5 to 10 minutes and resolved when the patient rested in a cool area. She had two additional episodes of pain, similar in quality and location, one while walking her dog and the other that woke her up from sleep, lasting 15 and 30 minutes, respectively. The patient did not attempt any specific measures to relieve her pain. She did not report any associated symptoms such as dizziness or palpitations but did experience shortness of breath during the episodes. She denied any history of chest pains, heart problems, claudication, smoking, or diabetes. She was diagnosed with hypertension three years ago and had a total abdominal hysterectomy with bilateral salpingo-oophorectomy six years ago. Her family history is significant for premature coronary artery disease. The patient does not know her cholesterol level."
+            },
+            "finish_reason":"stop"
+         }
+      ],
+      "usage":{
+         "prompt_tokens":718,
+         "completion_tokens":265,
+         "total_tokens":983
+      }
+   },
+   "raw_request":[
+      {
+         "role":"system",
+         "content":"Ensure that all placeholders, including those inside quotes, are enclosed by the greek letter alpha (α), exactly as I have done in this prompt. You MUST use the greek letter (α) to indicate placeholders. Use the context below to help answer the question and follow the desired format accurately."
+      },
+      {
+         "role":"user",
+         "content":"Please summarize the following medical record: \nPatient Name: αPERSON_1α, αPERSON_0α: 6/2/04\nReferral Source: Emergency Department\nData Source: Patient\nChief Complaint & ID: Ms. αPERSON_1α is a 56 y/o WF Define the reason for the patient’s visit as who has been\nhaving chest pains for the last week. specifically as possible.\n\nHistory of Present Illness\nThis is the first admission for this 56 year old woman, Convey the acute or chronic nature of the problem and\nwho states she was in her usual state of good health until establish a chronology.\none week prior to admission. At that time she noticed the\nabrupt onset (over a few seconds to a minute) of chest pain onset\nwhich she describes as dull and aching in character. The character\npain began in the left para-sternal area and radiated up to location\nher neck. The first episode of pain one week ago occurred radiation\nwhen she was working in her garden in the middle of the circumstances; exacerbating factors\nday. She states she had been working for approximately 45\nminutes and began to feel tired before the onset of the pain.\nHer discomfort was accompanied by shortness of breath, but associated symptoms\nno sweating, nausea, or vomiting. The pain lasted\napproximately 5 to 10 minutes and resolved when she went duration\ninside and rested in a cool area. resolution; alleviating factors\nSince that initial pain one week ago she has had 2 additional Describe the natural history of her problem since its\nepisodes of pain, similar in quality and location to the first onset\nepisode. Three days ago she had a 15 minute episode of\npain while walking her dog, which resolved with rest. This Change or new circumstances to the problem\nevening she had an episode of pain awaken her from sleep, New duration\nlasting 30 minutes, which prompted her visit to the Reason she come in for visit\nEmergency Department. At no time has she attempted any What has patient tried for relief\nspecific measures to relieve her pain, other than rest. She\ndescribes no other associated symptoms during these\nepisodes of pain, including dizziness, or palpitations. She\nbecomes short of breath during these Relevant positive and negative ROS for this complaint\nepisodes but describes no other exertional dyspnea,\northopnea, or paroxysmal nocturnal dyspnea. No change in the pain\nwith movement, no association with food, no GERD sx, no palpable pain.\nShe has never been told she has heart problems, never had any Review of systems for the relevant organ system\nchest pains before, does not have claudication. She was diagnosed with\nHTN 3 years ago,\nShe does not smoke nor does she have diabetes. Relevant risk factor/environmental conditions\nShe was diagnosed with hypertension 3 years ago and had a\nTAH with BSO 6 years ago. She is not on hormone replacement\ntherapy. There is a family history of premature CAD.\nShe does not know her cholesterol level. \n",
+         "name":"context"
+      }
+   ]
+}
+```
+
+</CodeGroup>
+
+## Results
+
+<Tabs>
+<Tab title="Anonymized Response">
+
+Here is the result of the request to the AI model. The model has removed all PHI information from the medical record and provided a summary of the medical record.
+```
+Summary: 
+
+This medical record summarizes the case of Ms. αPERSON_1α, a 56-year-old woman who presented to the Emergency Department with a chief complaint of chest pain that had been occurring for the past week. 
+
+The patient experienced an abrupt onset of dull and aching chest pain in the left para-sternal area, which radiated up to her neck while working in her garden. The pain was accompanied by shortness of breath but no sweating, nausea, or vomiting. 
+The episodes lasted for approximately 5 to 10 minutes and resolved when the patient rested in a cool area. 
+
+She had two additional episodes of pain, similar in quality and location, one while walking her dog and the other that woke her up from sleep, lasting 15 and 30 minutes, respectively. 
+
+The patient did not attempt any specific measures to relieve her pain. She did not report any associated symptoms such as dizziness or palpitations but did experience shortness of breath during the episodes. 
+She denied any history of chest pains, heart problems, claudication, smoking, or diabetes. 
+She was diagnosed with hypertension three years ago and had a total abdominal hysterectomy with bilateral salpingo-oophorectomy six years ago. 
+
+Her family history is significant for premature coronary artery disease. The patient does not know her cholesterol level.
+```
+</Tab>
+<Tab title="Deanonymized Response">
+Here is what Pontus will send back after adding back context for the PII layer.
+```
+Summary:
+
+This medical record summarizes the case of Ms. Rogers, a 56-year-old woman who presented to the Emergency Department with a chief complaint of chest pain that had been occurring for the past week.
+
+The patient experienced an abrupt onset of dull and aching chest pain in the left para-sternal area, which radiated up to her neck while working in her garden. The pain was accompanied by shortness of breath but no sweating, nausea, or vomiting. The episodes lasted for approximately 5 to 10 minutes and resolved when the patient rested in a cool area. 
+ 
+She had two additional episodes of pain, similar in quality and location, one while walking her dog and the other that woke her up from sleep, lasting 15 and 30 minutes, respectively. 
+The patient did not attempt any specific measures to relieve her pain. She did not report any associated symptoms such as dizziness or palpitations but did experience shortness of breath during the episodes. She denied any history of chest pains, heart problems, claudication, smoking, or diabetes. 
+ 
+She was diagnosed with hypertension three years ago and had a total abdominal hysterectomy with bilateral salpingo-oophorectomy six years ago. Her family history is significant for premature coronary artery disease. The patient does not know her cholesterol level
+```
+</Tab>
+</Tabs>

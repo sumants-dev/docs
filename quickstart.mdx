@@ -212,7 +212,7 @@ Use this approach if you want to have more control over the calls to LLMs yourse
         for k in delete_keys:
             del msg[k]
 
-
+    # this is a fake openai key, please replace it with your own
     openai.api_key = "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"
 
     # openai doesn't want null values, so we remove them
@@ -276,14 +276,14 @@ Use this approach if you want to have more control over the calls to LLMs yourse
   <Card
     title="Marketing Emails"
     icon="envelope"
-    href="https://mintlify.com/docs/settings/global"
+    href="tutorials/email-marketing"
   >
     Send personalized emails to customers without exposing personally identifiable information (PII).
   </Card>
   <Card
     title="Summarizing Healthcare Data"
     icon="heart"
-    href="https://mintlify.com/docs/api-playground/openapi"
+    href="tutorials/healthcare-doc"
   >
     Summarize healthcare data while adhering to HIPAA compliance standards.
   </Card>

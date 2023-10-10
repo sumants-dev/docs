@@ -50,6 +50,13 @@
       "pages": ["introduction", "quickstart", "why"]
     },
     {
+      "group": "Tutorials",
+      "pages": [ 
+        "tutorials/email-marketing",
+        "tutorials/healthcare-doc"
+      ]
+    },
+    {
       "group": "Configuration",
       "pages": [
         "configuration/introduction",

@@ -1,0 +1,185 @@
+---
+title: Email Marketing
+description: We will walk through how to use personalized email marketing without using PII
+---
+# Personalized Emails for Coffee Shop Grand Opening
+## Scenario
+Imagine you are managing a coffee shop, and you want to send a personalized email invitation to a customer without revealing their PII (Personally Identifiable Information). In this example, we'll send an email inviting a user to the grand opening of your coffee shop on a specific date. The only specific information we have about the user is their name and location.
+## Request to the Privacy Layer
+First, we'll make a request to the privacy layer to generate the email content. This request will be based on the user's name and the location of the coffee shop.
+
+<Info>
+    We expect that you have already done the [quickstart](/quickstart)
+</Info>
+
+<CodeGroup>
+```python email.py
+import requests
+import requests
+import json
+
+api_url = "http://localhost:8000"
+
+
+request = {
+    "provider": "openai",
+    "model": "gpt-3.5-turbo",
+    "messages": [
+        {
+            "role": "system",
+            "content": "Do not answer the request until the context below is used.\n Here is the context: John Green is a avid customer of our coffee shop. He always orders a vanilla latte large with a bannana muffin. He is a very loyal customer and has been coming to our coffee shop for 5 years. ",
+            "name": "context"
+        },
+        {
+            "role": "user",
+            "content": "Can you write a marketing email for John Green inviting him to renovation of our new coffee shop on Jan 4, 2023 at New York location?",
+            "name": "rankings"
+        }
+    ]
+}
+
+res = requests.post(
+    api_url + "/llm/chat/completions?debug=true", 
+    json=request,
+)
+```
+```json request
+{
+    "provider": "openai",
+    "model": "gpt-3.5-turbo",
+    "messages": [
+        {
+            "role": "system",
+            "content": "Do not answer the request until the context below is used.\n Here is the context: John Green is a avid customer of our coffee shop. He always orders a vanilla latte large with a bannana muffin. He is a very loyal customer and has been coming to our coffee shop for 5 years. ",
+            "name": "context"
+        },
+        {
+            "role": "user",
+            "content": "Can you write a marketing email for John Green inviting him to renovation of our new coffee shop on Jan 4, 2023 at New York location?",
+            "name": "rankings"
+        }
+    ]
+}
+```
+```json response
+{
+   "messages":[
+      {
+         "role":"assistant",
+         "content":"Subject: Join us for the Grand Renovation of New York - Exciting Changes Await!\n\nDear John Green,\n\nWe hope this email finds you well and enjoying your favorite vanilla latte large and banana muffin at our coffee shop! As a valued and loyal customer, we are thrilled to share some exciting news with you.\n\nMark your calendar for January 4, 2023, as we invite you to join us for the grand renovation of our coffee shop at New York! We are embarking on a journey to create an even better and cozier space for you to relax, indulge, and enjoy your favorite beverages and treats.\n\nYou have been a cherished part of our coffee shop family for an incredible 5 years, and we cannot wait to show our appreciation by unveiling a fresh, modern look that will elevate your coffee shop experience. The renovation will bring about stylish and comfortable seating areas, captivating artwork, and state-of-the-art equipment to enhance the quality of our offerings.\n\nThe grand reopening event promises to be a celebration filled with delightful surprises. As our special guest, you will be among the first to explore the redesigned space and sample our latest menu additions. Immerse yourself in the inviting ambiance, meet our talented baristas, and indulge in the aroma of freshly brewed coffee that is synonymous with our coffee shop.\n\nWe value your opinion, John Green, and would be thrilled to hear your thoughts and feedback on our newly renovated space. As always, our commitment remains to provide you with exceptional customer service and the highest quality products that you know and love.\n\nSave the date: January 4, 2023! We cannot wait to welcome you to the grand renovation of our coffee shop at New York. Together, let's embark on this exciting journey and create countless new memories over aromatic coffees and delectable treats.\n\nThank you for being an integral part of our coffee shop's success. We look forward to continuing to serve you and make your coffee experiences unforgettable.\n\nWarmest regards,\n\n[Your Name]\n[Your Coffee Shop's Name]"
+      }
+   ],
+   "provider_response":{
+      "id":"chatcmpl-88FMlybEwvIcD0o5XzDZyKsmVmz2r",
+      "object":"chat.completion",
+      "created":1696976383,
+      "model":"gpt-3.5-turbo-0613",
+      "choices":[
+         {
+            "index":0,
+            "message":{
+               "role":"assistant",
+               "content":"Subject: Join us for the Grand Renovation of αLOCATION_0α - Exciting Changes Await!\n\nDear αPERSON_0α,\n\nWe hope this email finds you well and enjoying your favorite vanilla latte large and banana muffin at our coffee shop! As a valued and loyal customer, we are thrilled to share some exciting news with you.\n\nMark your calendar for January 4, 2023, as we invite you to join us for the grand renovation of our coffee shop at αLOCATION_0α! We are embarking on a journey to create an even better and cozier space for you to relax, indulge, and enjoy your favorite beverages and treats.\n\nYou have been a cherished part of our coffee shop family for an incredible 5 years, and we cannot wait to show our appreciation by unveiling a fresh, modern look that will elevate your coffee shop experience. The renovation will bring about stylish and comfortable seating areas, captivating artwork, and state-of-the-art equipment to enhance the quality of our offerings.\n\nThe grand reopening event promises to be a celebration filled with delightful surprises. As our special guest, you will be among the first to explore the redesigned space and sample our latest menu additions. Immerse yourself in the inviting ambiance, meet our talented baristas, and indulge in the aroma of freshly brewed coffee that is synonymous with our coffee shop.\n\nWe value your opinion, αPERSON_0α, and would be thrilled to hear your thoughts and feedback on our newly renovated space. As always, our commitment remains to provide you with exceptional customer service and the highest quality products that you know and love.\n\nSave the date: January 4, 2023! We cannot wait to welcome you to the grand renovation of our coffee shop at αLOCATION_0α. Together, let's embark on this exciting journey and create countless new memories over aromatic coffees and delectable treats.\n\nThank you for being an integral part of our coffee shop's success. We look forward to continuing to serve you and make your coffee experiences unforgettable.\n\nWarmest regards,\n\n[Your Name]\n[Your Coffee Shop's Name]"
+            },
+            "finish_reason":"stop"
+         }
+      ],
+      "usage":{
+         "prompt_tokens":184,
+         "completion_tokens":425,
+         "total_tokens":609
+      }
+   },
+   "raw_provider_response":{
+      "id":"chatcmpl-88FMlybEwvIcD0o5XzDZyKsmVmz2r",
+      "object":"chat.completion",
+      "created":1696976383,
+      "model":"gpt-3.5-turbo-0613",
+      "choices":[
+         {
+            "index":0,
+            "message":{
+               "role":"assistant",
+               "content":"Subject: Join us for the Grand Renovation of αLOCATION_0α - Exciting Changes Await!\n\nDear αPERSON_0α,\n\nWe hope this email finds you well and enjoying your favorite vanilla latte large and banana muffin at our coffee shop! As a valued and loyal customer, we are thrilled to share some exciting news with you.\n\nMark your calendar for January 4, 2023, as we invite you to join us for the grand renovation of our coffee shop at αLOCATION_0α! We are embarking on a journey to create an even better and cozier space for you to relax, indulge, and enjoy your favorite beverages and treats.\n\nYou have been a cherished part of our coffee shop family for an incredible 5 years, and we cannot wait to show our appreciation by unveiling a fresh, modern look that will elevate your coffee shop experience. The renovation will bring about stylish and comfortable seating areas, captivating artwork, and state-of-the-art equipment to enhance the quality of our offerings.\n\nThe grand reopening event promises to be a celebration filled with delightful surprises. As our special guest, you will be among the first to explore the redesigned space and sample our latest menu additions. Immerse yourself in the inviting ambiance, meet our talented baristas, and indulge in the aroma of freshly brewed coffee that is synonymous with our coffee shop.\n\nWe value your opinion, αPERSON_0α, and would be thrilled to hear your thoughts and feedback on our newly renovated space. As always, our commitment remains to provide you with exceptional customer service and the highest quality products that you know and love.\n\nSave the date: January 4, 2023! We cannot wait to welcome you to the grand renovation of our coffee shop at αLOCATION_0α. Together, let's embark on this exciting journey and create countless new memories over aromatic coffees and delectable treats.\n\nThank you for being an integral part of our coffee shop's success. We look forward to continuing to serve you and make your coffee experiences unforgettable.\n\nWarmest regards,\n\n[Your Name]\n[Your Coffee Shop's Name]"
+            },
+            "finish_reason":"stop"
+         }
+      ],
+      "usage":{
+         "prompt_tokens":184,
+         "completion_tokens":425,
+         "total_tokens":609
+      }
+   },
+   "raw_request":[
+      {
+         "role":"system",
+         "content":"Ensure that all placeholders, including those inside quotes, are enclosed by the greek letter alpha (α), exactly as I have done in this prompt. You MUST use the greek letter (α) to indicate placeholders. Use the context below to help answer the question and follow the desired format accurately."
+      },
+      {
+         "role":"system",
+         "content":"Do not answer the request until the context below is used.\n Here is the context: αPERSON_0α is a avid customer of our coffee shop. He always orders a vanilla latte large with a bannana muffin. He is a very loyal customer and has been coming to our coffee shop for 5 years. ",
+         "name":"context"
+      },
+      {
+         "role":"user",
+         "content":"Can you write a marketing email for αPERSON_0α inviting him to renovation of our new coffee shop on Jan 4, 2023 at αLOCATION_0α location?",
+         "name":"rankings"
+      }
+   ]
+}
+```
+</CodeGroup>
+
+## Results
+<CodeGroup>
+
+```text anonymized_response.txt
+Subject: Join us for the Grand Renovation of αlocation_0α - Exciting Changes Await!
+
+Dear αperson_0α,
+
+We hope this email finds you well and enjoying your favorite vanilla latte large and banana muffin at our coffee shop! As a valued and loyal customer, we are thrilled to share some exciting news with you.
+
+Mark your calendar for january 4, 2023, as we invite you to join us for the grand renovation of our coffee shop at αlocation_0α! We are embarking on a journey to create an even better and cozier space for you to relax, indulge, and enjoy your favorite beverages and treats.
+
+You have been a cherished part of our coffee shop family for an incredible 5 years, and we cannot wait to show our appreciation by unveiling a fresh, modern look that will elevate your coffee shop experience. the renovation will bring about stylish and comfortable seating areas, captivating artwork, and state-of-the-art equipment to enhance the quality of our offerings.
+
+The grand reopening event promises to be a celebration filled with delightful surprises. As our special guest, you will be among the first to explore the redesigned space and sample our latest menu additions. immerse yourself in the inviting ambiance, meet our talented baristas, and indulge in the aroma of freshly brewed coffee that is synonymous with our coffee shop.
+
+We value your opinion, αperson_0α, and would be thrilled to hear your thoughts and feedback on our newly renovated space. as always, our commitment remains to provide you with exceptional customer service and the highest quality products that you know and love. Save the date: January 4, 2023! We cannot wait to welcome you to the grand renovation of our coffee shop at αlocation_0α. Together, let's embark on this exciting journey and create countless new memories over aromatic coffees and delectable treats.
+
+Thank you for being an integral part of our coffee shop's success. We look forward to continuing to serve you and make your coffee experiences unforgettable.
+
+Warmest Regards,
+
+[your name]
+[your coffee shop's name]
+```
+
+```text deanonymized_response.txt
+Subject: Join us for the Grand Renovation of New York - Exciting Changes Await!
+
+Dear John Green,
+
+We hope this email finds you well and enjoying your favorite vanilla latte large and banana muffin at our coffee shop! 
+As a valued and loyal customer, we are thrilled to share some exciting news with you.
+
+Mark your calendar for January 4, 2023, as we invite you to join us for the grand renovation of our coffee shop at New York! 
+We are embarking on a journey to create an even better and cozier space for you to relax, indulge, and enjoy your favorite beverages and treats.
+
+You have been a cherished part of our coffee shop family for an incredible 5 years, and we cannot wait to show our appreciation by unveiling a fresh, modern look that will elevate your coffee shop experience. The renovation will bring about stylish and comfortable seating areas, captivating artwork, and state-of-the-art equipment to enhance the quality of our offerings.
+
+The grand reopening event promises to be a celebration filled with delightful surprises. As our special guest, you will be among the first to explore the redesigned space and sample our latest menu additions. Immerse yourself in the inviting ambiance, meet our talented baristas, and indulge in the aroma of freshly brewed coffee that is synonymous with our coffee shop. We value your opinion, John Green, and would be thrilled to hear your thoughts and feedback on our newly renovated space. As always, our commitment remains to provide you with exceptional customer service and the highest quality products that you know and love.
+
+Save the date: January 4, 2023! We cannot wait to welcome you to the grand renovation of our coffee shop at New York. Together, let's embark on this exciting journey and create countless new memories over aromatic coffees and delectable treats.
+
+Thank you for being an integral part of our coffee shop's success. We look forward to continuing to serve you and make your coffee experiences unforgettable.
+
+Warmest regards,
+
+[Your Name]
+[Your Coffee Shop's Name]
+```
+
+</CodeGroup>
