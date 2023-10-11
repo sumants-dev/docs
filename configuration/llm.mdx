@@ -9,21 +9,21 @@ description: LLM Specification defines the core external providers that one can 
 
 * `type`- currently supports `openai`.
 * `default_model`- any of supported models by the provider, i.e. `gpt-3.5-turbo`
-* `api_key` - your api key for provider
+* `api_key`- your api key for provider
 
 ## Cache
 * `type` currently supports `small_cache`, which caches prompts under 256 words.
 
 ### Vector Collection
 * `vector_collection` is the document store that holds your business context securely and anonymously.
-    * `type` currently supports `pgvector`.
-    * `conn_str` the database connection string.
-    * `collection_name` defines the name of the vector collection. It will be stored as `Pontus.{collection_name}`
+    * `type`- currently supports `pgvector`.
+    * `conn_str`- the database connection string.
+    * `collection_name`- defines the name of the vector collection. It will be stored as `Pontus.{collection_name}`
 
 ### Embedder
 * `embedder` generates a vector representation of your business context to search on. 
-    * `type` currently supports `sentence_transformer` from hugging face.
-    * `model` supports all `sentence_transformer` models.
+    * `type`- currently supports `sentence_transformer` from hugging face.
+    * `model`- supports all `sentence_transformer` models.
 
 # Example
 ```yaml 
