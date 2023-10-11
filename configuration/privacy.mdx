@@ -6,17 +6,23 @@ description: Privacy is core component and is used throughout all our flows. Thi
 
 # Specification
 ## encryption
+Pontus encrypts your sensitive data at rest, everywhere, using randomized initial values for every item of data. This ensures that your data is not "pseudonymized", but truly anonymized per GDPR regulation.
 
-* `encryption_method`- Currently supports presidio from Microsoft. Our anonymizers are non-deterministic to avoid psuedononymization concerns with GDPR compliance.
-* `key`- 16, 24, or 32 character base 64 key
+* `encryption_method`- Currently supports `AES`.
+* `key`- 16, 24, or 32 character base 64 key.
 
 ## entity_resolution
+Pontus identifies sensitive data together to allow LLMs to learn from context, all without sharing any of the sensitive data with them.
 
-* Current supports only `equality` or `containment`. Equality would consider Rushabh as a different entity from Rushabh Mehta, while containment would not.
+* Current supports `equality` and `containment`.
+    * `equality`- treats sensitive data as the same entity only if the data is identical.
+    * `containment`- treats sensitive data as the same entity only if one of the data contains the other.
 
 ## sensitive_data
+Pontus allows you to choose how you define sensitive data.
 
-* `threshold`- set the sensitivity of anonymizer between 0 (most lenient) and 1 (least lenient)
+* `sensitive_data_method`- currently supports `presidio`, Microsoft's NLP PII detector. 
+* `threshold`- set the sensitive of sensitive data detection between 0 (most lenient) and 1 (least lenient)
 * `sensitive_data_types`- we support the following [`person`, `email_address`, `phone_number`, `person`, `social`, `ip`, `card`, `bank`, `passport`, `ssn`]
 
 # Example
