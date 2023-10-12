@@ -6,53 +6,6 @@ description: Here are some example configurations that might be useful to you.
 <CodeGroup>
 
 
-```yaml Basic with No Authentication
-    version: "0.1"
-    privacy:
-      encryption:
-        encryption_method: AES
-        key: env:anonymizer_key
-      entity_resolution: containment
-      sensitive_data:
-        sensitive_data_method: presidio
-        threshold: .5
-        sensitive_data_types:
-          - person
-          - email_address
-    application:
-      database:
-        type: postgres
-        conn_str: env:postgres_db_conn_str
-      authentication:
-        type: no_auth
-    llm:
-      provider:
-        type: openai
-        default_model: gpt-3.5-turbo
-        api_key: env:openai_api_key
-      cache:
-        type: small_cache
-        vector_collection:
-          type: pgvector
-          conn_str: env:postgres_db_conn_str
-          collection_name: prompt_cache
-        embedder:
-          type: sentence_transformer
-          model: all-MiniLM-L6-v2
-    document_store:
-      vector_collection:
-        type: pgvector
-        conn_str: env:postgres_db_conn_str
-        collection_name: node
-      chunker:
-        type: simple
-        chunk_overlap: 10
-      embedder:
-        type: sentence_transformer
-        model: all-MiniLM-L6-v2
-```
-
-
 ```yaml Basic with Authentication
     version: "0.1"
     privacy:
@@ -64,8 +17,8 @@ description: Here are some example configurations that might be useful to you.
         sensitive_data_method: presidio
         threshold: .5
         sensitive_data_types:
-          - person
-          - email_address
+          - PERSON
+          - EMAIL_ADDRESS
     application:
       database:
         type: postgres
