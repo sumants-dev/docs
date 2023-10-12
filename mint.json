@@ -90,16 +90,19 @@
       ]
     },
     {
-      "group": "Secure LLM",
+      "group": "LLM",
       "pages": [
-        "api-reference/llm/create-chat-completion"
+        "api-reference/llm/create-chat-completion",
+        "api-reference/llm/anonymize",
+        "api-reference/llm/deanonymize"
       ]
     },
     {
-      "group": "Privacy",
+      "group": "Audit",
       "pages": [
-        "api-reference/privacy/anonymize",
-        "api-reference/privacy/deanonymize"
+        "api-reference/audit/get-audit-records-for-session",
+        "api-reference/audit/get-audit-records"
+
       ]
     },
     {
