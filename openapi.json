@@ -95,6 +95,113 @@
                 ]
             }
         },
+        "/audit/all": {
+            "get": {
+                "tags": [
+                    "Audit"
+                ],
+                "summary": "Get Audit Records",
+                "description": "Get newest audit records",
+                "operationId": "get_audit_records_audit_all_get",
+                "security": [
+                    {
+                        "HTTPBasic": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "num_logs",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 100,
+                            "title": "Num Logs"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0,
+                            "title": "Page"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuditLogResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/audit/session": {
+            "get": {
+                "tags": [
+                    "Audit"
+                ],
+                "summary": "Get Audit Records For Session",
+                "description": "Get audit records for a specific session",
+                "operationId": "get_audit_records_for_session_audit_session_get",
+                "security": [
+                    {
+                        "HTTPBasic": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Session Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuditLogResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/llm/chat/completions": {
             "post": {
                 "tags": [
@@ -146,6 +253,124 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ChatCompletionSecureResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/llm/anonymize": {
+            "post": {
+                "tags": [
+                    "LLM"
+                ],
+                "summary": "Anonymize",
+                "description": "Anonymize messages being sent to llm providers, and create a audit of anonymization to be used for compliance",
+                "operationId": "anonymize_llm_anonymize_post",
+                "security": [
+                    {
+                        "HTTPBasic": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "debug",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "Debug"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AnonymizeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AnonymizeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/llm/deanonymize": {
+            "post": {
+                "tags": [
+                    "LLM"
+                ],
+                "summary": "Deanonymize",
+                "description": "Deanonymize messages that were sent to llm providers",
+                "operationId": "deanonymize_llm_deanonymize_post",
+                "security": [
+                    {
+                        "HTTPBasic": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "debug",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "Debug"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DeanonymizeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DeanonymizeResponse"
                                 }
                             }
                         }
@@ -221,124 +446,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/BaseResponseModel"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/HTTPValidationError"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/privacy/anonymize": {
-            "post": {
-                "tags": [
-                    "Privacy"
-                ],
-                "summary": "Anonymize",
-                "description": "Anonymize messages being sent to llm providers, and create a audit of anonymization to be used for compliance",
-                "operationId": "anonymize_privacy_anonymize_post",
-                "security": [
-                    {
-                        "HTTPBasic": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "debug",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean",
-                            "default": false,
-                            "title": "Debug"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AnonymizeRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/AnonymizeResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/HTTPValidationError"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/privacy/deanonymize": {
-            "post": {
-                "tags": [
-                    "Privacy"
-                ],
-                "summary": "Deanonymize",
-                "description": "Deanonymize messages that were sent to llm providers",
-                "operationId": "deanonymize_privacy_deanonymize_post",
-                "security": [
-                    {
-                        "HTTPBasic": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "debug",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean",
-                            "default": false,
-                            "title": "Debug"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/DeanonymizeRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/DeanonymizeResponse"
                                 }
                             }
                         }
@@ -466,6 +573,64 @@
                     "username"
                 ],
                 "title": "ApiDeletionReq"
+            },
+            "AuditLog": {
+                "properties": {
+                    "session_id": {
+                        "type": "string",
+                        "title": "Session Id"
+                    },
+                    "username": {
+                        "type": "string",
+                        "title": "Username"
+                    },
+                    "accessed_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Accessed At"
+                    },
+                    "log_type": {
+                        "$ref": "#/components/schemas/LogType"
+                    },
+                    "api_endpoint": {
+                        "$ref": "#/components/schemas/Endpoint"
+                    },
+                    "content": {
+                        "type": "string",
+                        "title": "Content"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "title": "Metadata"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "session_id",
+                    "username",
+                    "accessed_at",
+                    "log_type",
+                    "api_endpoint",
+                    "content",
+                    "metadata"
+                ],
+                "title": "AuditLog"
+            },
+            "AuditLogResponse": {
+                "properties": {
+                    "audit_logs": {
+                        "items": {
+                            "$ref": "#/components/schemas/AuditLog"
+                        },
+                        "type": "array",
+                        "title": "Audit Logs"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "audit_logs"
+                ],
+                "title": "AuditLogResponse"
             },
             "BaseResponseModel": {
                 "properties": {
@@ -837,6 +1002,15 @@
                 ],
                 "title": "DeanonymizeResponse"
             },
+            "Endpoint": {
+                "type": "string",
+                "enum": [
+                    "anonymize",
+                    "deanonymize",
+                    "chat_completion"
+                ],
+                "title": "Endpoint"
+            },
             "FunctionCall": {
                 "properties": {
                     "name": {
@@ -894,6 +1068,14 @@
                 },
                 "type": "object",
                 "title": "HTTPValidationError"
+            },
+            "LogType": {
+                "type": "string",
+                "enum": [
+                    "llm_request",
+                    "llm_response"
+                ],
+                "title": "LogType"
             },
             "OpenAIOptions": {
                 "properties": {
