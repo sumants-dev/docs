@@ -47,14 +47,18 @@ description: "Start building privacy-safe AI in minutes"
         sensitive_data_method: presidio
         threshold: .5
         sensitive_data_types:
-          - person
-          - email_address
+          - PERSON
+          - EMAIL_ADDRESS
+          - LOCATION
+          - DATE_TIME
     application:
       database:
         type: postgres
         conn_str: env:postgres_db_conn_str
       authentication:
         type: no_auth
+      audit:
+        type: basic_audit
     llm:
       provider:
         type: openai
