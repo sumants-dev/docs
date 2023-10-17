@@ -8,9 +8,8 @@ description:  We will explore the process of anonymization, specifically how Pon
 
 Anonymization is the process of rendering information untraceable to an individual. It involves the removal or alteration of data elements that could identify a person, such as names, addresses, phone numbers, and other personal details. Anonymization is crucial for ensuring compliance with GDPR and CPRA regulations, particularly in the context of the "right to be forgotten."
 
-
 <Warning>
-It's important to distinguish between anonymization and pseudonymization. A one-to-one mapping of tokens to individuals is considered pseudonymization, not true anonymization, as defined by GDPR. Pseudonymization can still potentially identify the person associated with a token.
+As per GDPR regulation, using a deterministic and reversible encryption algorithm to anonymize PII is called pseudonymization and is still considered PII.
 </Warning>
 
 ## How does Pontus Anonymize Data?
@@ -19,8 +18,8 @@ Pontus employs a three-step process for anonymizing data:
 
 1. **Identification of PII (Personally Identifiable Information):** Pontus utilizes NLP algorithms to automatically detect PII in the data. Additionally, customers have the flexibility to define their own PII identification methods.
 
-2. **Replacement of PII with Randomized Unique Tokens:** All instances of PII are replaced with randomized, unique tokens generated for each session. For example, `john` might be transformed into `ZG5mamRuZiBqYXNuYWpkIGEzbzNl`.
+2. **Replacement of PII with Randomized Unique Tokens:** All instances of PII are replaced with randomized, unique tokens. Importantly, each instance of PII will be encrypted with a unique initial value, ensuring that the data is differentially private.
 
-3. **Creation of Tokens for Personalization:** To maintain the personalization capabilities of LLM, Pontus associates each token with an entity. For instance, `ZG5mamRuZiBqYXNuYWpkIGEzbzNl` could be associated with `person_0.`
+3. **Creation of Tokens for Personalization:** To maintain the personalization capabilities of LLM, Pontus associates each token with an entity. For instance, `ZG5mamRuZiBqYXNuYWpkIGEzbzNl` could be associated with `PERSON_0.`
 
 By implementing this process, Pontus can personalize data without retaining any actual PII, ensuring compliance with GDPR and CPRA regulations.

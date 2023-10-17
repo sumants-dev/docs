@@ -8,20 +8,20 @@ The document store defines where documents are kept. We use the documents to cre
 
 
 ## Vector Collection
-* `vector_collection` is the document store that will be use for retrieval augment generation
-    * `type` support only `pgvector`
-    * `conn_str` put the postgres connection string
-    * `collection_name` defines the table to be used, we recommend node
+* `vector_collection` is a document store that is used in retrieval augment generation.
+    * `type`- supports `pgvector`
+    * `conn_str`- the database connection string
+    * `collection_name`- the name of the collection.
 
 ## Chunker
-* `chunker` take in documents and chunk it in snippets that have context
-    * `type` supports `simple`, `nltk`, and `spacy`
-    * `chunk_overlap` is an integer that defines that allowed overlap words between each chunk
+* `chunker` take in documents and chunk it in snippets for priming the LLM with context.
+    * `type`- supports `simple`, `nltk`, and `spacy`.
+    * `chunk_overlap`- the max allowed overlap words between chunks.
 
 ## Embedder
-* `embedder` is a the transformer applied to chunks into document store
-    * `type` only supports `sentence_transformer` from hugging face
-    * `model` any from hugging face will work
+* `embedder` generates vector representations for chunks for similarity searching.
+    * `type`- supports `sentence_transformer` from hugging face.
+    * `model`- supports any sentence transformer model.
 
 ## Example
 ```yaml copy
