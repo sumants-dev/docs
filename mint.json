@@ -83,10 +83,17 @@
       ]
     },
     {
-      "group": "API Key Management",
+      "group": "Authentication",
       "pages": [
         "api-reference/authentication/create-api-key",
         "api-reference/authentication/delete-api-key"
+      ]
+    },
+    {
+      "group": "Audit",
+      "pages": [
+        "api-reference/audit/get-audit-records",
+        "api-reference/audit/get-audit-records-for-session"
       ]
     },
     {
@@ -98,18 +105,10 @@
       ]
     },
     {
-      "group": "Audit",
-      "pages": [
-        "api-reference/audit/get-audit-records-for-session",
-        "api-reference/audit/get-audit-records"
-
-      ]
-    },
-    {
       "group": "Document Store",
       "pages": [
         "api-reference/document-store/load",
-        "api-reference/document-store/bulk-load"
+        "api-reference/document-store/store"
       ]
     }
   ],
