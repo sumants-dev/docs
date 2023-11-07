@@ -1,0 +1,110 @@
+---
+title: Redaction
+description: Here we demonstrate the ability to redact and anonymize data using the Pontus Privacy Layer
+---
+
+# Redaction API Usage
+
+## Scenario
+Some customers want complete control over the data that is sent to AI models. We offer the ability to use pontus simply as a redaction API.
+
+<Warning> We recommend most customers to use Pontus as a LLM orchestration layer </Warning>
+
+
+## Anonymize Information
+Endpoint `/v1/anonymization/tokenize`
+<CodeGroup>
+
+```json anonymize.py
+import requests
+
+request = {
+    "message": {
+        "some_key": "Rushabh metha has a phone number 954-501-7875",
+        "some_key_2": "Sumant Shringari has a ssn 484-44-4333",
+        "nesting": {
+            "key": "you can send any json."
+        }
+    }
+}
+
+response = requests.post(f"{api_url}/v1/anonymization/tokenize", json=request)
+
+```
+Endpoint `/v1/anonymization/detokenize`
+```json request
+{
+    "message": {
+        "some_key": "Rushabh metha has a phone number 954-501-7875",
+        "some_key_2": "Sumant Shringari has a ssn 484-44-4333",
+        "nesting": {
+            "key": "you can send any json. 902 Woodland Dr, NY, NYC, 10001"
+        }
+    }
+}
+
+```
+
+```json response
+{
+    "session_id": "NjK7p1KeSEMXamju0TE3wA",
+    "message": {
+        "some_key": "αPERSON_0α has a phone number αPHONE_NUMBER_0α",
+        "some_key_2": "αPERSON_1α has a ssn αUS_SSN_0α",
+        "nesting": {
+            "key": "αPERSON_2α αPERSON_3α send αPERSON_4α αPERSON_5α.αLOCATION_0α, NY, NYC, 10001"
+        }
+    }
+}
+```
+
+</CodeGroup>
+
+## Deanonymize Information
+<CodeGroup>
+
+```json anonymize.py
+import requests
+
+request = {
+    "session_id": "NjK7p1KeSEMXamju0TE3wA",
+    "message": {
+        "some_key": "αPERSON_0α has a phone number αPHONE_NUMBER_0α",
+        "some_key_2": "αPERSON_1α has a ssn αUS_SSN_0α",
+        "nesting": {
+            "key": "αPERSON_2α αPERSON_3α send αPERSON_4α αPERSON_5α.αLOCATION_0α, NY, NYC, 10001"
+        }
+    }
+}
+
+response = requests.post(f"{api_url}/v1/anonymization/tokenize", json=request)
+
+```
+
+```json request
+{
+    "session_id": "NjK7p1KeSEMXamju0TE3wA",
+    "message": {
+        "some_key": "αPERSON_0α has a phone number αPHONE_NUMBER_0α",
+        "some_key_2": "αPERSON_1α has a ssn αUS_SSN_0α",
+        "nesting": {
+            "key": "αPERSON_2α αPERSON_3α send αPERSON_4α αPERSON_5α.αLOCATION_0α, NY, NYC, 10001"
+        }
+    }
+}
+
+```
+
+```json response
+{
+    "message": {
+        "some_key": "Rushabh metha has a phone number 954-501-7875",
+        "some_key_2": "Sumant Shringari has a ssn 484-44-4333",
+        "nesting": {
+            "key": "you can send any json. 902 Woodland Dr, NY, NYC, 10001"
+        }
+    }
+}
+```
+
+</CodeGroup>

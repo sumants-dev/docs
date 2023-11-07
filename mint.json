@@ -57,7 +57,8 @@
       "group": "Tutorials",
       "pages": [
         "tutorials/email-marketing",
-        "tutorials/healthcare-doc"
+        "tutorials/healthcare-doc",
+        "tutorials/anonymization-demo"
       ]
     },
     {

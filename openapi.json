@@ -242,15 +242,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/ChatCompletionSecureResponse"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/api__llm__models__BaseExceptionResponse"
-                                        }
-                                    ],
-                                    "title": "Response Create Chat Completion V1 Llm Chat Completions Post"
+                                    "$ref": "#/components/schemas/ChatCompletionSecureResponse"
                                 }
                             }
                         }
@@ -309,15 +301,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/AnonymizeResponse"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/api__llm__models__BaseExceptionResponse"
-                                        }
-                                    ],
-                                    "title": "Response Anonymize V1 Llm Anonymize Post"
+                                    "$ref": "#/components/schemas/AnonymizeResponse"
                                 }
                             }
                         }
@@ -376,15 +360,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/DeanonymizeResponse"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/api__llm__models__BaseExceptionResponse"
-                                        }
-                                    ],
-                                    "title": "Response Deanonymize V1 Llm Deanonymize Post"
+                                    "$ref": "#/components/schemas/DeanonymizeResponse"
                                 }
                             }
                         }
@@ -425,15 +401,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/TokenizeResponse"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/api__anonymization__models__BaseExceptionResponse"
-                                        }
-                                    ],
-                                    "title": "Response Tokenize V1 Anonymization Tokenize Post"
+                                    "$ref": "#/components/schemas/TokenizeResponse"
                                 }
                             }
                         }
@@ -479,15 +447,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "$ref": "#/components/schemas/DetokenizeResponse"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/api__anonymization__models__BaseExceptionResponse"
-                                        }
-                                    ],
-                                    "title": "Response Detokenize V1 Anonymization Detokenize Post"
+                                    "$ref": "#/components/schemas/DetokenizeResponse"
                                 }
                             }
                         }
@@ -1449,42 +1409,6 @@
                     "type"
                 ],
                 "title": "ValidationError"
-            },
-            "api__anonymization__models__BaseExceptionResponse": {
-                "properties": {
-                    "error": {
-                        "type": "boolean",
-                        "title": "Error"
-                    },
-                    "message": {
-                        "type": "string",
-                        "title": "Message"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "error",
-                    "message"
-                ],
-                "title": "BaseExceptionResponse"
-            },
-            "api__llm__models__BaseExceptionResponse": {
-                "properties": {
-                    "error": {
-                        "type": "boolean",
-                        "title": "Error",
-                        "default": true
-                    },
-                    "message": {
-                        "type": "string",
-                        "title": "Message"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "message"
-                ],
-                "title": "BaseExceptionResponse"
             }
         },
         "securitySchemes": {
