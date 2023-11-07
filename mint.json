@@ -47,11 +47,15 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "why"]
+      "pages": [
+        "introduction",
+        "quickstart",
+        "why"
+      ]
     },
     {
       "group": "Tutorials",
-      "pages": [ 
+      "pages": [
         "tutorials/email-marketing",
         "tutorials/healthcare-doc"
       ]
@@ -72,10 +76,10 @@
         {
           "group": "Specifications",
           "pages": [
-            "configuration/version", 
-            "configuration/application", 
-            "configuration/privacy", 
-            "configuration/llm", 
+            "configuration/version",
+            "configuration/application",
+            "configuration/privacy",
+            "configuration/llm",
             "configuration/document_store"
           ]
         },
@@ -105,10 +109,23 @@
       ]
     },
     {
+      "group": "Anonymization",
+      "pages": [
+        "api-reference/anonymization/tokenize",
+        "api-reference/anonymization/detokenize"
+      ]
+    },
+    {
       "group": "Document Store",
       "pages": [
         "api-reference/document-store/load",
         "api-reference/document-store/store"
+      ]
+    },
+    {
+      "group": "Health",
+      "pages": [
+        "api-reference/health/health"
       ]
     }
   ],
